@@ -41,6 +41,4 @@ class UserWords(Base):
 
 def create_tables(engine):
     """Инициализация структуры БД."""
-    # В продакшене drop_all обычно не используется
-    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
