@@ -119,7 +119,8 @@ def send_question(message):
                  .filter(Users.chat_id == user_chat_id).all())
 
         if not words:
-            bot.send_message(message.chat.id, "У вас нет слов для изучения.")
+            bot.send_message(message.chat.id, ("У вас нет слов для изучения."
+                                               "\nДобавить слово: /add"))
             return
 
         random_word_line = random.choice(words)
