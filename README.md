@@ -4,7 +4,7 @@
 
 ## ⚡️ Проверка работы (Live Demo)
 Бот запущен на сервере и доступен для тестирования в режиме реального времени:
-👉 <a href="https://t.me/DiplomEnglishLearnBot" target="_blank">EnglishCardBot</a>
+👉 [EnglishCardBot](https://t.me/DiplomEnglishLearnBot)
 
 *Примечание: Бот работает на домашнем сервере (Synology NAS), возможны кратковременные перебои при обновлении соединения.*
 
