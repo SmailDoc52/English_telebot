@@ -2,10 +2,8 @@ import os
 import random
 import time
 
-import telebot
-import sqlalchemy
 from dotenv import load_dotenv
-from sqlalchemy import func
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from telebot import types, TeleBot, custom_filters
 from telebot.storage import StateMemoryStorage
@@ -73,21 +71,22 @@ def start_bot(message):
         if not user:
             new_user = Users(chat_id=user_chat_id)
             session.add(new_user)
-            session.commit()
+            session.flush()
 
             bot.send_message(message.chat.id, welcome_msg)
 
             all_words = session.query(Words).all()
-            for word in all_words:
-                user_word = UserWords(user_id=new_user.id, words_id=word.id)
-                session.add(user_word)
+            users_words = [UserWords(user_id=new_user.id, words_id=word.id)
+                           for word in all_words]
+
+            session.add_all(users_words)
             session.commit()
+        send_question(message)
     except Exception as e:
         print(f"Ошибка регистрации: {e}")
         session.rollback()
     finally:
         session.close()
-        send_question(message)
 
 
 @bot.message_handler(commands=["add"])
@@ -234,7 +233,7 @@ def add_word(message):
 if __name__ == "__main__":
     DSN = (f'postgresql://{db_user}:{db_password}'
            f'@localhost:5432/{db_name}')
-    engine = sqlalchemy.create_engine(DSN)
+    engine = create_engine(DSN)
 
     create_tables(engine)
     Session = sessionmaker(bind=engine)
